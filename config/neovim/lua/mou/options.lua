@@ -19,3 +19,4 @@ vim.opt.relativenumber = false
 vim.opt.numberwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
+vim.opt.termguicolors = true
