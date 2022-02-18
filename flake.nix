@@ -19,16 +19,10 @@
       alejandra,
       ...
     } @ inputs:
-    let
-      system = "x86_64-linux";
-    in {
+    {
       homeConfigurations = {
         linux-dev-laptop = inputs.home-manager.lib.homeManagerConfiguration {
-          inherit system;
-          pkgs = import nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-          };
+          system = "x86_64-linux";
           homeDirectory = "/home/mou";
           username = "mou";
           configuration =
@@ -39,6 +33,9 @@
               ...
             }:
             {
+              nixpkgs.config = {
+                allowUnfree = true;
+              };
               fonts.fontconfig.enable = true;
               home.packages = with pkgs; [
                 tig
