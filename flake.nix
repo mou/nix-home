@@ -47,6 +47,8 @@
                 (nerdfonts.override { fonts = ["FiraCode" "JetBrainsMono" "Meslo"]; })
                 _1password
                 alejandra.defaultPackage.${system}
+                restic
+                obsidian
               ];
               programs.zsh = {
                 enable = true;
@@ -104,6 +106,7 @@
                     enabled = true;
                   };
                 };
+                includes = [];
               };
               programs.direnv = {
                 enable = true;
