@@ -9,6 +9,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     alejandra = {
       url = "github:kamadorueda/alejandra";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
