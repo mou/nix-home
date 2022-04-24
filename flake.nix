@@ -13,119 +13,55 @@
     };
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      alejandra,
-      ...
-    } @ inputs:
-    {
-      homeConfigurations = {
-        linux-dev-laptop = inputs.home-manager.lib.homeManagerConfiguration {
-          system = "x86_64-linux";
-          homeDirectory = "/home/mou";
-          username = "mou";
-          configuration =
-            {
-              pkgs,
-              config,
-              lib,
-              ...
-            }:
-            {
-              nixpkgs.config = {
-                allowUnfree = true;
-              };
-              fonts.fontconfig.enable = true;
-              home.packages = with pkgs; [
-                tig
-                htop
-                amfora
-                tree
-                fira-code
-                jetbrains-mono
-                (nerdfonts.override { fonts = ["FiraCode" "JetBrainsMono" "Meslo"]; })
-                _1password
-                alejandra.defaultPackage.${system}
-                restic
-                obsidian
-              ];
-              programs.zsh = {
-                enable = true;
-                oh-my-zsh = {
-                  enable = true;
-                  plugins = ["git"];
-                  theme = "simple";
-                };
-                plugins = [
-                  {
-                    name = "powerlevel10k";
-                    src = pkgs.zsh-powerlevel10k;
-                    file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-                  }
-                  {
-                    name = "powerlevel10k-config";
-                    src = lib.cleanSource ./config/zsh/p10k-config;
-                    file = "p10k.zsh";
-                  }
-                ];
-                initExtra =
-                  ''
-                    source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-                    export NIX_PATH=''${NIX_PATH:+$NIX_PATH:}''$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels
-                    if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
-                      source ~/.nix-profile/etc/profile.d/nix.sh
-                    fi
-                    source ''$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-                    export SSH_AUTH_SOCK=''$(gpgconf --list-dirs agent-ssh-socket)
-                  '';
-              };
-              programs.neovim = {
-                enable = true;
-                vimAlias = true;
-                viAlias = true;
-                extraConfig = builtins.concatStringsSep "\n" [
-                  ''
-                    luafile ${builtins.toString ./config/neovim/init_lua.lua}
-                  ''
-                ];
-              };
-              programs.git = {
-                enable = true;
-                userEmail = "anlarionov@gmail.com";
-                userName = "Andrey \"MOU\" Larionov";
-                signing = {
-                  key = "5FF293FC94C01D6A";
-                  signByDefault = true;
-                };
-                extraConfig = {
-                  init = {
-                    defaultBranch = "main";
-                  };
-                  rerere = {
-                    enabled = true;
-                  };
-                };
-                includes = [];
-              };
-              programs.direnv = {
-                enable = true;
-                enableZshIntegration = true;
-                nix-direnv.enable = true;
-              };
-              xdg = {
-                enable = true;
-                configFile = {
-                  nvim = {
-                    source = ./config/neovim;
-                    recursive = true;
-                  };
-                };
-              };
-            };
+  outputs = {
+    self,
+    nixpkgs,
+    alejandra,
+    ...
+  } @ inputs: {
+    homeConfigurations = {
+      linux-dev-laptop = inputs.home-manager.lib.homeManagerConfiguration {
+        system = "x86_64-linux";
+        homeDirectory = "/home/mou";
+        username = "mou";
+        configuration = {
+          pkgs,
+          config,
+          lib,
+          ...
+        }: {
+          imports = [
+            ./modules/vim.nix
+            ./modules/zsh.nix
+            ./modules/git.nix
+          ];
+          nixpkgs.config = {
+            allowUnfree = true;
+          };
+          fonts.fontconfig.enable = true;
+          home.packages = with pkgs; [
+            tig
+            htop
+            amfora
+            tree
+            fira-code
+            jetbrains-mono
+            (nerdfonts.override {fonts = ["FiraCode" "JetBrainsMono" "Meslo"];})
+            _1password
+            alejandra.defaultPackage.${system}
+            restic
+            ripgrep
+            obsidian
+          ];
+          programs.direnv = {
+            enable = true;
+            enableZshIntegration = true;
+            nix-direnv.enable = true;
+          };
+          xdg.enable = true;
         };
       };
-      linux-dev-laptop = self.homeConfigurations.linux-dev-laptop.activationPackage;
     };
+    linux-dev-laptop = self.homeConfigurations.linux-dev-laptop.activationPackage;
+  };
 }
