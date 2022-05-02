@@ -52,6 +52,9 @@
             restic
             ripgrep
             obsidian
+            tmux
+            nix-prefetch
+            lazygit
           ];
           programs.direnv = {
             enable = true;
