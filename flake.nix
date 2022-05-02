@@ -18,7 +18,11 @@
     nixpkgs,
     alejandra,
     ...
-  } @ inputs: {
+  } @ inputs:
+  let
+    overlays = [ (import ./packages/overlay.nix) ];
+  in
+  {
     homeConfigurations = {
       linux-dev-laptop = inputs.home-manager.lib.homeManagerConfiguration {
         system = "x86_64-linux";
@@ -38,6 +42,7 @@
           nixpkgs.config = {
             allowUnfree = true;
           };
+          nixpkgs.overlays = overlays;
           fonts.fontconfig.enable = true;
           home.packages = with pkgs; [
             tig
