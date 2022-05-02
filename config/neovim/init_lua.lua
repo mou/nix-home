@@ -1,6 +1,5 @@
 -- NeoVIM Configuration
 require "mou.options"
 require "mou.keymaps"
-require "mou.which-key"
 require "mou.colorscheme"
---require "mou.complete"
+require "mou.load_plugins"

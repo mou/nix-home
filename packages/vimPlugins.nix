@@ -1,5 +1,7 @@
-{ vimUtils, fetchFromGitHub }:
 {
+  vimUtils,
+  fetchFromGitHub,
+}: {
   neo-tree-nvim = vimUtils.buildVimPluginFrom2Nix {
     pname = "neo-tree.nvim";
     version = "2.21";

@@ -18,11 +18,9 @@
     nixpkgs,
     alejandra,
     ...
-  } @ inputs:
-  let
-    overlays = [ (import ./packages/overlay.nix) ];
-  in
-  {
+  } @ inputs: let
+    overlays = [(import ./packages/overlay.nix)];
+  in {
     homeConfigurations = {
       linux-dev-laptop = inputs.home-manager.lib.homeManagerConfiguration {
         system = "x86_64-linux";

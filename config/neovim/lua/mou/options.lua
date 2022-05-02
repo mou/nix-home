@@ -20,3 +20,6 @@ vim.opt.numberwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
 vim.opt.termguicolors = true
+
+vim.g.do_filetype_lua = 1
+vim.g.did_load_filetypes = 0
