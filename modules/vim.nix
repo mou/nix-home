@@ -75,6 +75,7 @@ in {
       (p cmp_luasnip "cmp_luasnip" optional)
       (p cmp-buffer "cmp_buffer" optional)
       (p cmp-path "cmp_path" optional)
+      (p cmp-nvim-lsp "cmp_lsp" optional)
       # Neo Tree
       (p neo-tree-nvim "neotree" optional)
     ];
