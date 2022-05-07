@@ -14,11 +14,20 @@
 in {
   programs.neovim = {
     enable = true;
+
+    withPython3 = true;
+    withRuby = true;
+    withNodeJs = true;
+
     vimAlias = true;
     viAlias = true;
+
     extraPackages = with pkgs; [
       tree-sitter
       ripgrep
+      
+      nodePackages.pyright
+      rust-analyzer
     ];
     plugins = with pkgs.vimPlugins; [
       tokyonight-nvim
@@ -50,6 +59,8 @@ in {
       # Git
       (p gitsigns-nvim "gitsigns" optional)
       # LSP
+      (p nvim-lspconfig "lspconfig" {})
+      # Liniting
       (p null-ls-nvim "null_ls" optional)
       # Utils and small enchancements
       (p nvim-autopairs "autopairs" optional)
