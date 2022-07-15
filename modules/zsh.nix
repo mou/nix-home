@@ -7,7 +7,7 @@
     enable = true;
     oh-my-zsh = {
       enable = true;
-      plugins = ["git"];
+      plugins = ["git" "gcloud" "kubectl" "helm" "aws"];
       theme = "simple";
     };
     plugins = [
@@ -25,6 +25,7 @@
     initExtra = ''
       source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
       export NIX_PATH=''${NIX_PATH:+$NIX_PATH:}''$HOME/.nix-defexpr/channels:/nix/var/nix/profiles/per-user/root/channels
+      export PATH=''${PATH}:''$HOME/.local/bin
       if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
         source ~/.nix-profile/etc/profile.d/nix.sh
       fi

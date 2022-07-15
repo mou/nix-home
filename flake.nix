@@ -1,29 +1,34 @@
 {
   description = "MOU's home configuration";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-22.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
     alejandra = {
-      url = "github:kamadorueda/alejandra";
+      url = "github:kamadorueda/alejandra/2.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = {
     self,
     nixpkgs,
     alejandra,
     ...
   } @ inputs: let
-    overlays = [(import ./packages/overlay.nix)];
+    pkgs_overlays = import ./packages/overlay.nix;
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+      overlays = pkgs_overlays;
+    };
   in {
     homeConfigurations = {
       linux-dev-laptop = inputs.home-manager.lib.homeManagerConfiguration {
-        system = "x86_64-linux";
+        inherit system pkgs;
         homeDirectory = "/home/mou";
         username = "mou";
         configuration = {
@@ -37,10 +42,6 @@
             ./modules/zsh.nix
             ./modules/git.nix
           ];
-          nixpkgs.config = {
-            allowUnfree = true;
-          };
-          nixpkgs.overlays = overlays;
           fonts.fontconfig.enable = true;
           home.packages = with pkgs; [
             tig
@@ -54,10 +55,10 @@
             alejandra.defaultPackage.${system}
             restic
             ripgrep
-            obsidian
             tmux
             nix-prefetch
             lazygit
+            obsidian-export
           ];
           programs.direnv = {
             enable = true;
